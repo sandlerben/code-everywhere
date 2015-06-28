@@ -7,7 +7,7 @@
   right: -51px;
 }
 nav#chapters {
-  width: 70px;
+  width: 350px;
   position: fixed;
   z-index: 50;
 }
@@ -114,4 +114,8 @@ ul.masthead {
 .small {
   font-size: 11px;
   padding: .2em 1em .275em;
+}
+
+#error {
+  color: #FF0000;
 }
