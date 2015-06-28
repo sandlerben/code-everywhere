@@ -427,6 +427,7 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 
 
         <script src="javascripts/littools.js"></script>
+        <script src="javascripts/python.js"></script>
         <script>
         var editor = CodeMirror.fromTextArea(document.getElementById('yourcode'), {
             lineNumbers: true,
@@ -436,6 +437,7 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
         autoMatchParens: true,
         parserConfig: {'pythonVersion': 2, 'strictErrors': true},
 });
+        editor.setSize("150%", null);
 
 // Here's everything you need to run a python program in skulpt
 // grab the code from your textarea
