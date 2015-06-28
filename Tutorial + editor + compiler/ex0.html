@@ -106,31 +106,9 @@ function builtinRead(x) {
             throw "File not found: '" + x + "'";
     return Sk.builtinFiles["files"][x];
 }
-
-// Here's everything you need to run a python program in skulpt
-// grab the code from your textarea
-// get a reference to your pre element for output
-// configure the output function
-// call Sk.importMainWithBody()
-function runit() {
-   var prog = document.getElementById("yourcode").value;
-   var mypre = document.getElementById("output");
-   mypre.innerHTML = '';
-   Sk.pre = "output";
-   Sk.configure({output:outf, read:builtinRead});
-   (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-   var myPromise = Sk.misceval.asyncToPromise(function() {
-       return Sk.importMainWithBody("<stdin>", false, prog, true);
-   });
-   myPromise.then(function(mod) {
-       console.log('success');
-   },
-       function(err) {
-        $('#error').html(err.toString());
-   });
-}
 </script>
-
+        <link rel="stylesheet" href="stylesheets/codemirror.css">
+        <link href='stylesheets/monokai.css' rel='stylesheet'>
 <h3>Code here:</h3>
 <form>
 <textarea id="yourcode" cols="40" rows="10">
@@ -148,6 +126,60 @@ print "Hello World"
                     </div>
                   </nav><!-- /.chapters -->
             </div><!-- /.chapters-wrapper -->
+
+        <script src="javascripts/codemirror.js"></script>
+        <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+        <script src="javascripts/python.js"></script>
+        <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById('yourcode'), {
+            lineNumbers: true,
+            theme: 'monokai',
+            mode: 'python',
+        indentUnit: 4,
+        autoMatchParens: true,
+        parserConfig: {'pythonVersion': 2, 'strictErrors': true},
+});
+        editor.setSize("150%", null);
+
+// Here's everything you need to run a python program in skulpt
+// grab the code from your textarea
+// get a reference to your pre element for output
+// configure the output function
+// call Sk.importMainWithBody()
+function runit() {
+   // var prog = document.getElementById("yourcode").value;
+   var prog = editor.getValue();
+   var mypre = document.getElementById("output");
+   mypre.innerHTML = '';
+   Sk.pre = "output";
+   Sk.configure({output:outf, read:builtinRead});
+   (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+   var myPromise = Sk.misceval.asyncToPromise(function() {
+       return Sk.importMainWithBody("<stdin>", false, prog, true);
+   });
+   myPromise.then(function(mod) {
+       console.log('success');
+   },
+       function(err) {
+        $('#error').html(err.toString());
+   });
+}
+        </script>
 
         <!--- RST STARTS -->
             <h1 class="title">Exercise 0: The Setup</h1>
@@ -430,22 +462,6 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
         <link rel="stylesheet" href="../../paydiv.io/static/js/videojs/video-js.css">
         <script src="../../paydiv.io/static/api/v1/paydiv.js"></script>
         <script src="javascripts/app.js"></script>
-        <script src="javascripts/littools.js"></script>
-        <script type="text/javascript">
-
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-24168052-1']);
-        _gaq.push(['_trackPageview']);
-
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-
-        </script>
-
-
         <script src="javascripts/littools.js"></script>
           </div>
         </body>
