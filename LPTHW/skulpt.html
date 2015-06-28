@@ -1,0 +1,102 @@
+    <body id='wrapper' class='row'>
+      <div class="col-xs-9">
+<!-- -->
+<div class="row">
+<div class="col-xs-3">
+<!-- -->
+                      </div>
+                      <div class="col-xs-9">
+
+<script src="javascripts/jquery.js"></script>
+<link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+<script src="stylesheets/bootstrap.min.js"></script>
+<script src="stylesheets/skulpt.min.js" type="text/javascript"></script>
+<script src="stylesheets/skulpt-stdlib.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+// output functions are configurable.  This one just appends some text
+// to a pre element.
+function outf(text) {
+    var mypre = document.getElementById("output");
+    mypre.innerHTML = mypre.innerHTML + text;
+}
+function builtinRead(x) {
+    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+            throw "File not found: '" + x + "'";
+    return Sk.builtinFiles["files"][x];
+}
+</script>
+        <link rel="stylesheet" href="stylesheets/codemirror.css">
+        <link href='stylesheets/monokai.css' rel='stylesheet'>
+<h3>Code here:</h3>
+<form>
+<textarea id="yourcode" cols="40" rows="10">
+
+print "Hello World"
+</textarea><br><br>
+<button type="button" onclick="runit()">Run</button>
+</form><br>
+<pre id="output" ></pre>
+<div id="error"></div>
+<!-- If you want turtle graphics include a canvas -->
+<div id="mycanvas"></div>
+
+                        </div>
+                    </div>
+                  </nav><!-- /.chapters -->
+            </div><!-- /.chapters-wrapper -->
+
+        <script src="javascripts/codemirror.js"></script>
+        <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24168052-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+        </script>
+
+
+        <script src="javascripts/littools.js"></script>
+        <script src="javascripts/python.js"></script>
+        <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById('yourcode'), {
+            lineNumbers: true,
+            theme: 'monokai',
+            mode: 'python',
+        indentUnit: 4,
+        autoMatchParens: true,
+        parserConfig: {'pythonVersion': 2, 'strictErrors': true},
+});
+        editor.setSize("150%", null);
+
+// Here's everything you need to run a python program in skulpt
+// grab the code from your textarea
+// get a reference to your pre element for output
+// configure the output function
+// call Sk.importMainWithBody()
+function runit() {
+   // var prog = document.getElementById("yourcode").value;
+   var prog = editor.getValue();
+   var mypre = document.getElementById("output");
+   mypre.innerHTML = '';
+   Sk.pre = "output";
+   Sk.configure({output:outf, read:builtinRead});
+   (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+   var myPromise = Sk.misceval.asyncToPromise(function() {
+       return Sk.importMainWithBody("<stdin>", false, prog, true);
+   });
+   myPromise.then(function(mod) {
+       console.log('success');
+       $('#error').html('');
+   },
+       function(err) {
+        $('#error').html(err.toString());
+   });
+}
+        </script>
